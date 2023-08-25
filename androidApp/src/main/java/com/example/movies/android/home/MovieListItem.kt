@@ -27,6 +27,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.movies.domain.model.Movie
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Composable
 fun MovieListItem(
@@ -83,8 +85,14 @@ fun MovieListItem(
 
                 Spacer(modifier = Modifier.height(4.dp))
 
+                val inputFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+                val outputFormatter = SimpleDateFormat("d MMMM yyyy", Locale.ENGLISH)
+
+                val releaseDate = inputFormatter.parse(movie.releaseDate)
+                val formattedDate = outputFormatter.format(releaseDate)
+
                 Text(
-                    text = movie.releaseDate,
+                    text = formattedDate,
                     style = MaterialTheme.typography.caption
                 )
             }

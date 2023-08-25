@@ -28,6 +28,10 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.movies.android.R
 import com.example.movies.android.data.Movie
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun MovieListItem(
@@ -86,13 +90,17 @@ fun MovieListItem(
 
                 Spacer(modifier = Modifier.height(4.dp))
 
+                val inputFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+                val outputFormatter = SimpleDateFormat("d MMMM yyyy", Locale.ENGLISH)
+
+                val releaseDate = inputFormatter.parse(movie.release_date)
+                val formattedDate = outputFormatter.format(releaseDate)
+
                 Text(
-                    text = movie.release_date,
+                    text = formattedDate,
                     style = MaterialTheme.typography.caption
                 )
             }
         }
-
     }
-
 }
