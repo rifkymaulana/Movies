@@ -105,6 +105,16 @@ fun MovieApp() {
 
                 DetailScreen(uiState = detailViewModel.uiState)
             }
+
+            composable(Category.routeWithArgs) {
+                CategoryScreen(
+                    navigateToDetail = {
+                        navController.navigate(
+                            "${Detail.route}/${it.id}"
+                        )
+                    }
+                )
+            }
         }
     }
 }

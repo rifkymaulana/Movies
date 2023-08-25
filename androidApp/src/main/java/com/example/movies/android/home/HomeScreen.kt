@@ -45,17 +45,36 @@ fun HomeScreen(
             .background(color = MaterialTheme.colors.background)
             .pullRefresh(state = pullRefreshState)
     ) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            itemsIndexed(
-                uiState.movies,
-                key = { _, movie -> movie.id }
-            ) { index, movie ->
-                MovieListItem(movie = movie, onMovieClick = { navigateToDetail(movie) })
+        Column {
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Welcome to Movies, User!",
+                    style = MaterialTheme.typography.h5,
+                    textAlign = TextAlign.Center,
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                )
+            }
+
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                itemsIndexed(
+                    uiState.movies,
+                    key = { _, movie -> movie.id + Math.random() }
+                ) { index, movie ->
+
+                    MovieListItem(movie = movie, onMovieClick = { navigateToDetail(movie) })
 
                 if (index >= uiState.movies.size - 1 && !uiState.loading && !uiState.loadFinished) {
                     LaunchedEffect(key1 = Unit, block = { loadNextMovies(false) })
