@@ -36,15 +36,11 @@ fun MovieListItem(
 ) {
     Card(
         modifier = modifier
-            .height(450.dp)
             .clickable { onMovieClick(movie) },
         shape = RoundedCornerShape(8.dp)
     ) {
         Column {
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 AsyncImage(

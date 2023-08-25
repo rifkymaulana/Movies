@@ -11,6 +11,10 @@ internal class RemoteDataSource(
         apiService.getMovies(page = page)
     }
 
+    suspend fun getMoviesNowPlaying(page: Int) = withContext(dispatcher.io) {
+        apiService.getMoviesNowPlaying(page = page)
+    }
+
     suspend fun getMovie(movieId: Int) = withContext(dispatcher.io) {
         apiService.getMovie(movieId = movieId)
     }

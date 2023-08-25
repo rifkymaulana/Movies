@@ -14,6 +14,12 @@ internal class MovieRepositoryImpl(
         }
     }
 
+    override suspend fun getMoviesNowPlaying(page: Int): List<Movie> {
+        return remoteDataSource.getMoviesNowPlaying(page = page).results.map {
+            it.toMovie()
+        }
+    }
+
     override suspend fun getMovie(movieId: Int): Movie {
         return remoteDataSource.getMovie(movieId = movieId).toMovie()
     }
