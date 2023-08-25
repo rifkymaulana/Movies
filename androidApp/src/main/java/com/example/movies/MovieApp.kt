@@ -14,21 +14,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.movies.android.category.CategoryScreen
-import com.example.movies.android.category.CategoryViewModel
-import com.example.movies.android.common.Category
 import com.example.movies.android.common.Detail
 import com.example.movies.android.common.Home
 import com.example.movies.android.common.Login
-import com.example.movies.android.common.MovieBottomBar
-import com.example.movies.android.common.Register
+import com.example.movies.android.common.MovieAppBar
 import com.example.movies.android.common.movieDestinations
 import com.example.movies.android.detail.DetailScreen
 import com.example.movies.android.detail.DetailViewModel
 import com.example.movies.android.home.HomeScreen
 import com.example.movies.android.home.HomeViewModel
 import com.example.movies.android.login.LoginScreen
-import com.example.movies.android.register.RegisterScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -51,13 +46,13 @@ fun MovieApp() {
 
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = movieDestinations.find {
-        backStackEntry?.destination?.route == it.route || backStackEntry?.destination?.route == it.routeWithArgs
+        backStackEntry?.destination?.route == it.route ||
+                backStackEntry?.destination?.route == it.routeWithArgs
     }
 
     Scaffold(
         scaffoldState = scaffoldState,
-
-        /*topBar = {
+        topBar = {
             currentScreen?.let { screen ->
                 if (screen != Login) {
                     if (screen == Home) {
@@ -76,46 +71,41 @@ fun MovieApp() {
                     }
                 }
             }
-        }*/
-
-        bottomBar = {
-            currentScreen?.let { screen ->
-                if (screen != Login && screen != Register) {
-                    MovieBottomBar(navController)
-                }
-            }
-        }) { innerPaddings ->
+        }
+    ) { innerPaddings ->
         NavHost(
             navController = navController,
             modifier = Modifier.padding(innerPaddings),
-            startDestination = Register.route
+            startDestination = Login.route
         ) {
-            composable(Register.route) {
-                RegisterScreen(navController)
-            }
-
             composable(Login.route) {
                 LoginScreen(navController)
             }
 
             composable(Home.routeWithArgs) {
                 val homeViewModel: HomeViewModel = koinViewModel()
-                HomeScreen(uiState = homeViewModel.uiState, loadNextMovies = {
-                    homeViewModel.loadMovies(forceReload = it)
-                }, navigateToDetail = {
-                    navController.navigate(
-                        "${Detail.route}/${it.id}"
-                    )
-                })
+                HomeScreen(
+                    uiState = homeViewModel.uiState,
+                    loadNextMovies = {
+                        homeViewModel.loadMovies(forceReload = it)
+                    },
+                    navigateToDetail = {
+                        navController.navigate(
+                            "${Detail.route}/${it.id}"
+                        )
+                    }
+                )
             }
 
             composable(Detail.routeWithArgs, arguments = Detail.arguments) {
                 val movieId = it.arguments?.getInt("movieId") ?: 0
-                val detailViewModel: DetailViewModel =
-                    koinViewModel(parameters = { parametersOf(movieId) })
+                val detailViewModel: DetailViewModel = koinViewModel(
+                    parameters = { parametersOf(movieId) }
+                )
 
                 DetailScreen(uiState = detailViewModel.uiState)
             }
+<<<<<<< HEAD
 
             composable(Category.routeWithArgs) {
                 CategoryScreen(
@@ -126,6 +116,8 @@ fun MovieApp() {
                     }
                 )
             }
+=======
+>>>>>>> 3d6bb84 (Revert "feat: category screen")
         }
     }
 }

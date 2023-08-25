@@ -10,11 +10,6 @@ internal class MovieService: KtorApi() {
         parameter("page", page)
     }.body()
 
-    suspend fun getMoviesNowPlaying(page: Int = 1): MoviesResponse = client.get {
-        pathUrl("movie/now_playing")
-        parameter("page", page)
-    }.body()
-
     suspend fun getMovie(movieId: Int): MovieRemote = client.get {
         pathUrl("movie/$movieId")
     }.body()

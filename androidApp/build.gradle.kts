@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.movies.android"
-    compileSdk = 34
+    compileSdk = 33
     defaultConfig {
         applicationId = "com.example.movies.android"
         minSdk = 24
@@ -46,21 +46,16 @@ dependencies {
     val composeVersion = "1.4.2"
 
     implementation(project(":shared"))
-    implementation("androidx.compose.ui:ui:1.5.0")
-    implementation("androidx.compose.ui:ui-tooling:1.5.0")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.5.0")
-    implementation("androidx.compose.foundation:foundation:1.5.0")
-    implementation("androidx.compose.material:material:1.5.0")
-    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation("androidx.compose.ui:ui:1.4.3")
+    implementation("androidx.compose.ui:ui-tooling:1.4.3")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.4.3")
+    implementation("androidx.compose.foundation:foundation:1.4.3")
+    implementation("androidx.compose.material:material:1.4.3")
+    implementation("androidx.activity:activity-compose:1.7.1")
 
     implementation("io.insert-koin:koin-androidx-compose:$koinComposeVersion")
     implementation("io.coil-kt:coil-compose:$coilVersion")
     implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
     implementation("androidx.navigation:navigation-compose:$navVersion")
     implementation("androidx.compose.material:material-icons-extended:$composeVersion")
-
-    implementation("androidx.navigation:navigation-compose:2.7.1")
-
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 }

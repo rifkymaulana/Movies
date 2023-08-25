@@ -12,4 +12,5 @@ internal fun MovieRemote.toMovie(): Movie {
         releaseDate = releaseDate
     )
 }
+
 private fun getImage(posterImage: String): String = "https://image.tmdb.org/t/p/w500/$posterImage"

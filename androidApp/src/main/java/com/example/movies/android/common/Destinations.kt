@@ -9,17 +9,6 @@ interface Destination {
     val routeWithArgs: String
 }
 
-object Register : Destination {
-    override val title: String
-        get() = "Register"
-
-    override val route: String
-        get() = "register"
-
-    override val routeWithArgs: String
-        get() = route
-}
-
 object Login : Destination {
     override val title: String
         get() = "Login"
@@ -58,21 +47,4 @@ object Detail : Destination {
     )
 }
 
-object Category : Destination {
-    override val title: String
-        get() = "Category"
-
-    override val route: String
-        get() = "category"
-
-    override val routeWithArgs: String
-        get() = route
-}
-
-val movieDestinations = listOf(
-    Register,
-    Login,
-    Home,
-    Detail,
-    Category
-)
+val movieDestinations = listOf(Home, Detail)
