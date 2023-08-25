@@ -19,37 +19,53 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.movies.android.Red
+import com.example.movies.android.data.AUTHORIZATION_HEADER
+import com.example.movies.android.data.Movie
+import com.example.movies.android.data.Movies
+import com.example.movies.android.data.movieApiService
 import com.example.movies.android.home.HomeScreenState
-import com.example.movies.android.home.MovieListItem
-import com.example.movies.domain.model.Movie
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CategoryScreen(
-    modifier: Modifier = Modifier,
-    uiState: HomeScreenState,
-    loadNextMovies: (Boolean) -> Unit,
-    navigateToDetail: (Movie) -> Unit
-) {
-    val pullRefreshState = rememberPullRefreshState(
-        refreshing = uiState.refreshing,
-        onRefresh = { loadNextMovies(true) }
-    )
+fun CategoryScreen() {
+    var movieNowPlaying by remember { mutableStateOf(emptyList<Movie>()) }
+
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(key1 = true) {
+        scope.launch {
+            try {
+                val response: Movies = movieApiService.getNowPlaying(
+                    AUTHORIZATION_HEADER
+                )
+                movieNowPlaying = response.results ?: emptyList()
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(color = MaterialTheme.colors.background)
-            .pullRefresh(state = pullRefreshState)
     ) {
         LazyColumn {
             item {
                 Row(
-                    modifier = modifier
+                    modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
                     horizontalArrangement = Arrangement.Center,
@@ -59,7 +75,7 @@ fun CategoryScreen(
                         text = "Welcome to Movies, User!",
                         style = MaterialTheme.typography.h5,
                         textAlign = TextAlign.Center,
-                        modifier = modifier
+                        modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
                     )
@@ -70,155 +86,14 @@ fun CategoryScreen(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     itemsIndexed(
-                        uiState.movies,
+                        movieNowPlaying,
                         key = { _, movie -> movie.id }
                     ) { _, movie ->
-                        MovieListItem(movie = movie, onMovieClick = { navigateToDetail(movie) })
-                    }
-
-                    if (uiState.loading && uiState.movies.isNotEmpty()) {
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .padding(16.dp)
-                            ) {
-                                CircularProgressIndicator(color = Red)
-                            }
-                        }
+                        MovieListItem(movie = movie, onMovieClick = {  })
                     }
                 }
             }
-            item {
-                Row(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Welcome to Movies, User!",
-                        style = MaterialTheme.typography.h5,
-                        textAlign = TextAlign.Center,
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                    )
-                }
-
-                LazyRow(
-                    contentPadding = PaddingValues(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    itemsIndexed(
-                        uiState.movies,
-                        key = { _, movie -> movie.id }
-                    ) { _, movie ->
-                        MovieListItem(movie = movie, onMovieClick = { navigateToDetail(movie) })
-                    }
-
-                    if (uiState.loading && uiState.movies.isNotEmpty()) {
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .padding(16.dp)
-                            ) {
-                                CircularProgressIndicator(color = Red)
-                            }
-                        }
-                    }
-                }
-            }
-            item {
-                Row(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Welcome to Movies, User!",
-                        style = MaterialTheme.typography.h5,
-                        textAlign = TextAlign.Center,
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                    )
-                }
-
-                LazyRow(
-                    contentPadding = PaddingValues(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    itemsIndexed(
-                        uiState.movies,
-                        key = { _, movie -> movie.id }
-                    ) { _, movie ->
-                        MovieListItem(movie = movie, onMovieClick = { navigateToDetail(movie) })
-                    }
-
-                    if (uiState.loading && uiState.movies.isNotEmpty()) {
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .padding(16.dp)
-                            ) {
-                                CircularProgressIndicator(color = Red)
-                            }
-                        }
-                    }
-                }
-            }
-            item {
-                Row(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Welcome to Movies, User!",
-                        style = MaterialTheme.typography.h5,
-                        textAlign = TextAlign.Center,
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                    )
-                }
-
-                LazyRow(
-                    contentPadding = PaddingValues(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    itemsIndexed(
-                        uiState.movies,
-                        key = { _, movie -> movie.id }
-                    ) { _, movie ->
-                        MovieListItem(movie = movie, onMovieClick = { navigateToDetail(movie) })
-                    }
-
-                    if (uiState.loading && uiState.movies.isNotEmpty()) {
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .padding(16.dp)
-                            ) {
-                                CircularProgressIndicator(color = Red)
-                            }
-                        }
-                    }
-                }
-            }
-
         }
-
-        PullRefreshIndicator(
-            refreshing = uiState.refreshing,
-            state = pullRefreshState,
-            modifier = modifier.align(Alignment.TopCenter)
-        )
     }
 }
 

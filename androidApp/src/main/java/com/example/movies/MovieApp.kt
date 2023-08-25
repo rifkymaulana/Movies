@@ -118,14 +118,7 @@ fun MovieApp() {
             }
 
             composable(Category.routeWithArgs) {
-                val homeViewModel: HomeViewModel = koinViewModel()
-                CategoryScreen(uiState = homeViewModel.uiState, loadNextMovies = {
-                    homeViewModel.loadMovies(forceReload = it)
-                }, navigateToDetail = {
-                    navController.navigate(
-                        "${Detail.route}/${it.id}"
-                    )
-                })
+                CategoryScreen()
             }
         }
     }
