@@ -9,6 +9,18 @@ interface Destination {
     val routeWithArgs: String
 }
 
+object Login : Destination {
+    override val title: String
+        get() = "Login"
+
+    override val route: String
+        get() = "login"
+
+    override val routeWithArgs: String
+        get() = route
+}
+
+
 object Home : Destination {
     override val title: String
         get() = "Movies"

@@ -31,7 +31,7 @@ fun MyApplicationTheme(
         )
     } else {
         lightColors(
-            primary = Color(0xFF6200EE),
+            primary = Color.LightGray,
             primaryVariant = Color(0xFF3700B3),
             secondary = Color(0xFF03DAC5)
         )

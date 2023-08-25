@@ -43,6 +43,7 @@ dependencies {
     val coilVersion = "2.2.2"
     val accompanistVersion = "0.28.0"
     val navVersion = "2.5.3"
+    val composeVersion = "1.4.2"
 
     implementation(project(":shared"))
     implementation("androidx.compose.ui:ui:1.4.3")
@@ -56,4 +57,5 @@ dependencies {
     implementation("io.coil-kt:coil-compose:$coilVersion")
     implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
     implementation("androidx.navigation:navigation-compose:$navVersion")
+    implementation("androidx.compose.material:material-icons-extended:$composeVersion")
 }

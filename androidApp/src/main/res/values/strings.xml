@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Movies</string>
+    <string name="hide_password">Hide Password</string>
+    <string name="show_password">Show Password</string>
+    <string name="login">Login</string>
 </resources>

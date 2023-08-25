@@ -16,12 +16,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.movies.android.common.Detail
 import com.example.movies.android.common.Home
+import com.example.movies.android.common.Login
 import com.example.movies.android.common.MovieAppBar
 import com.example.movies.android.common.movieDestinations
 import com.example.movies.android.detail.DetailScreen
 import com.example.movies.android.detail.DetailViewModel
 import com.example.movies.android.home.HomeScreen
 import com.example.movies.android.home.HomeViewModel
+import com.example.movies.android.login.LoginScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -46,24 +48,40 @@ fun MovieApp() {
     val currentScreen = movieDestinations.find {
         backStackEntry?.destination?.route == it.route ||
                 backStackEntry?.destination?.route == it.routeWithArgs
-    } ?: Home
+    }
 
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            MovieAppBar(
-                canNavigateBack = navController.previousBackStackEntry != null,
-                currentScreen = currentScreen
-            ) {
-                navController.navigateUp()
+            currentScreen?.let { screen ->
+                if (screen != Login) {
+                    if (screen == Home) {
+                        MovieAppBar(
+                            canNavigateBack = false,
+                            currentScreen = screen
+                        ) {
+                        }
+                    } else {
+                        MovieAppBar(
+                            canNavigateBack = navController.previousBackStackEntry != null,
+                            currentScreen = screen
+                        ) {
+                            navController.navigateUp()
+                        }
+                    }
+                }
             }
         }
     ) { innerPaddings ->
         NavHost(
             navController = navController,
             modifier = Modifier.padding(innerPaddings),
-            startDestination = Home.routeWithArgs
+            startDestination = Login.route
         ) {
+            composable(Login.route) {
+                LoginScreen(navController)
+            }
+
             composable(Home.routeWithArgs) {
                 val homeViewModel: HomeViewModel = koinViewModel()
                 HomeScreen(
@@ -79,7 +97,7 @@ fun MovieApp() {
                 )
             }
 
-            composable(Detail.routeWithArgs, arguments = Detail.arguments){
+            composable(Detail.routeWithArgs, arguments = Detail.arguments) {
                 val movieId = it.arguments?.getInt("movieId") ?: 0
                 val detailViewModel: DetailViewModel = koinViewModel(
                     parameters = { parametersOf(movieId) }
@@ -88,6 +106,5 @@ fun MovieApp() {
                 DetailScreen(uiState = detailViewModel.uiState)
             }
         }
-
     }
 }
