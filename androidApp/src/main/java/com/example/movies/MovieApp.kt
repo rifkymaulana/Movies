@@ -105,19 +105,6 @@ fun MovieApp() {
 
                 DetailScreen(uiState = detailViewModel.uiState)
             }
-<<<<<<< HEAD
-
-            composable(Category.routeWithArgs) {
-                CategoryScreen(
-                    navigateToDetail = {
-                        navController.navigate(
-                            "${Detail.route}/${it.id}"
-                        )
-                    }
-                )
-            }
-=======
->>>>>>> 3d6bb84 (Revert "feat: category screen")
         }
     }
 }
