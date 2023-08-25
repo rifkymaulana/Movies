@@ -25,6 +25,21 @@ interface MovieApiService {
     suspend fun getNowPlaying(
         @Header("Authorization") authorization: String
     ): Movies
+
+    @GET("movie/popular?language=en&page=1")
+    suspend fun getPopular(
+        @Header("Authorization") authorization: String
+    ): Movies
+
+    @GET("movie/top_rated?language=en&page=1")
+    suspend fun getTopRated(
+        @Header("Authorization") authorization: String
+    ): Movies
+
+    @GET("movie/upcoming?language=en&page=1")
+    suspend fun getUpcoming(
+        @Header("Authorization") authorization: String
+    ): Movies
 }
 
 object RetrofitInstance {

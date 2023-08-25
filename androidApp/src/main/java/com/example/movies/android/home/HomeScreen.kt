@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material.CircularProgressIndicator
@@ -74,7 +73,7 @@ fun HomeScreen(
             ) {
                 itemsIndexed(
                     uiState.movies,
-                    key = { _, movie -> movie.id }
+                    key = { _, movie -> movie.id + Math.random() }
                 ) { index, movie ->
 
                     MovieListItem(movie = movie, onMovieClick = { navigateToDetail(movie) })
@@ -108,7 +107,5 @@ fun HomeScreen(
             state = pullRefreshState,
             modifier = modifier.align(Alignment.TopCenter)
         )
-
     }
-
 }

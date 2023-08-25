@@ -118,7 +118,13 @@ fun MovieApp() {
             }
 
             composable(Category.routeWithArgs) {
-                CategoryScreen()
+                CategoryScreen(
+                    navigateToDetail = {
+                        navController.navigate(
+                            "${Detail.route}/${it.id}"
+                        )
+                    }
+                )
             }
         }
     }

@@ -39,8 +39,11 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CategoryScreen() {
+fun CategoryScreen(navigateToDetail: (com.example.movies.domain.model.Movie) -> Unit) {
     var movieNowPlaying by remember { mutableStateOf(emptyList<Movie>()) }
+    var moviePopular by remember { mutableStateOf(emptyList<Movie>()) }
+    var movieTopRated by remember { mutableStateOf(emptyList<Movie>()) }
+    var movieUpcoming by remember { mutableStateOf(emptyList<Movie>()) }
 
     val scope = rememberCoroutineScope()
     LaunchedEffect(key1 = true) {
@@ -50,6 +53,21 @@ fun CategoryScreen() {
                     AUTHORIZATION_HEADER
                 )
                 movieNowPlaying = response.results ?: emptyList()
+
+                val response2: Movies = movieApiService.getPopular(
+                    AUTHORIZATION_HEADER
+                )
+                moviePopular = response2.results ?: emptyList()
+
+                val response3: Movies = movieApiService.getTopRated(
+                    AUTHORIZATION_HEADER
+                )
+                movieTopRated = response3.results ?: emptyList()
+
+                val response4: Movies = movieApiService.getUpcoming(
+                    AUTHORIZATION_HEADER
+                )
+                movieUpcoming = response4.results ?: emptyList()
 
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -72,9 +90,9 @@ fun CategoryScreen() {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Welcome to Movies, User!",
+                        text = "Now Playing",
                         style = MaterialTheme.typography.h5,
-                        textAlign = TextAlign.Center,
+                        textAlign = TextAlign.Start,
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
@@ -89,7 +107,140 @@ fun CategoryScreen() {
                         movieNowPlaying,
                         key = { _, movie -> movie.id }
                     ) { _, movie ->
-                        MovieListItem(movie = movie, onMovieClick = {  })
+                        MovieListItem(movie = movie, onMovieClick = {
+                            // convert movie data class to movie domain model
+                            val movieDomainModel = com.example.movies.domain.model.Movie(
+                                id = movie.id,
+                                title = movie.title,
+                                imageUrl = "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
+                                description = movie.overview,
+                                releaseDate = movie.release_date
+                            )
+                            navigateToDetail(movieDomainModel)
+                        })
+                    }
+                }
+            }
+
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Popular",
+                        style = MaterialTheme.typography.h5,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    )
+                }
+
+                LazyRow(
+                    contentPadding = PaddingValues(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    itemsIndexed(
+                        moviePopular,
+                        key = { _, movie -> movie.id }
+                    ) { _, movie ->
+                        MovieListItem(movie = movie, onMovieClick = {
+                            // convert movie data class to movie domain model
+                            val movieDomainModel = com.example.movies.domain.model.Movie(
+                                id = movie.id,
+                                title = movie.title,
+                                imageUrl = "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
+                                description = movie.overview,
+                                releaseDate = movie.release_date
+                            )
+                            navigateToDetail(movieDomainModel)
+                        })
+                    }
+                }
+            }
+
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Top Rated",
+                        style = MaterialTheme.typography.h5,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    )
+                }
+
+                LazyRow(
+                    contentPadding = PaddingValues(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    itemsIndexed(
+                        movieTopRated,
+                        key = { _, movie -> movie.id }
+                    ) { _, movie ->
+                        MovieListItem(movie = movie, onMovieClick = {
+                            // convert movie data class to movie domain model
+                            val movieDomainModel = com.example.movies.domain.model.Movie(
+                                id = movie.id,
+                                title = movie.title,
+                                imageUrl = "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
+                                description = movie.overview,
+                                releaseDate = movie.release_date
+                            )
+                            navigateToDetail(movieDomainModel)
+                        })
+                    }
+                }
+            }
+
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Upcoming",
+                        style = MaterialTheme.typography.h5,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    )
+                }
+
+                LazyRow(
+                    contentPadding = PaddingValues(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    itemsIndexed(
+                        movieUpcoming,
+                        key = { _, movie -> movie.id }
+                    ) { _, movie ->
+                        MovieListItem(movie = movie, onMovieClick = {
+                            // convert movie data class to movie domain model
+                            val movieDomainModel = com.example.movies.domain.model.Movie(
+                                id = movie.id,
+                                title = movie.title,
+                                imageUrl = "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
+                                description = movie.overview,
+                                releaseDate = movie.release_date
+                            )
+                            navigateToDetail(movieDomainModel)
+                        })
                     }
                 }
             }
