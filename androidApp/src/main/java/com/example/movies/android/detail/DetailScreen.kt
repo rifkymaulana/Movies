@@ -22,19 +22,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.movies.android.Movie
 import com.example.movies.android.R
 import com.example.movies.android.Red
+import com.example.movies.android.database.MovieFavEntity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun DetailScreen(
     modifier: Modifier = Modifier, uiState: DetailScreenState
 ) {
+    val context = LocalContext.current
+
     Box(
         contentAlignment = Alignment.Center
     ) {
@@ -84,7 +92,28 @@ fun DetailScreen(
                     Spacer(modifier = modifier.height(8.dp))
 
                     Button(
-                        onClick = {},
+                        onClick = {
+                            val application = context.applicationContext as Movie
+                            val database = (application as Movie).database
+                            val movieFavDao = database.movieFavDao()
+                            val accountDao = database.accountDao()
+
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val account = accountDao.getAccountByIsLogin(true)
+
+                                account?.let { nonNullAccount ->
+                                    val movieFavEntity = MovieFavEntity(
+                                        title = movie.title,
+                                        poster_path = movie.imageUrl,
+                                        overview = movie.description,
+                                        release_date = movie.releaseDate,
+                                        user_id = nonNullAccount.id
+                                    )
+
+                                    movieFavDao.insertMovieFav(movieFavEntity)
+                                }
+                            }
+                        },
                         modifier = modifier
                             .fillMaxWidth()
                             .height(46.dp),

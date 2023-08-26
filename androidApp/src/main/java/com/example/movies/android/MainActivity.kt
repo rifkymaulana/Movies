@@ -12,11 +12,6 @@ import com.example.movies.MovieApp
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val myApp = application as Movie
-        val appDatabase = myApp.database
-        val accountDao = appDatabase.accountDao()
-
         setContent {
             MyApplicationTheme {
                 Surface(
