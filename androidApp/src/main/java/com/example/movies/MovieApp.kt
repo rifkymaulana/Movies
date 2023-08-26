@@ -23,12 +23,14 @@ import com.example.movies.android.common.Home
 import com.example.movies.android.common.Login
 import com.example.movies.android.common.MovieBottomBar
 import com.example.movies.android.common.MovieFav
+import com.example.movies.android.common.PreLogin
 import com.example.movies.android.common.Register
 import com.example.movies.android.common.movieDestinations
 import com.example.movies.android.detail.DetailScreen
 import com.example.movies.android.detail.DetailViewModel
 import com.example.movies.android.home.HomeScreen
 import com.example.movies.android.home.HomeViewModel
+import com.example.movies.android.login.LoginScreen
 import com.example.movies.android.login.PreLoginScreen
 import com.example.movies.android.moviefav.MovieFavScreen
 import com.example.movies.android.register.RegisterScreen
@@ -60,7 +62,7 @@ fun MovieApp() {
 
     Scaffold(scaffoldState = scaffoldState, bottomBar = {
         currentScreen?.let { screen ->
-            if (screen != Login && screen != Register) {
+            if (screen != Login && screen != Register  && screen != PreLogin) {
                 MovieBottomBar(navController)
             }
         }
@@ -68,15 +70,19 @@ fun MovieApp() {
         NavHost(
             navController = navController,
             modifier = Modifier.padding(innerPaddings),
-            startDestination = Login.route
+            startDestination = PreLogin.route
         ) {
 
             composable(Register.route) {
                 RegisterScreen(navController)
             }
 
-            composable(Login.route) {
+            composable(PreLogin.route) {
                 PreLoginScreen(navController)
+            }
+
+            composable(Login.route) {
+                LoginScreen(navController = navController)
             }
 
             composable(Home.routeWithArgs) {

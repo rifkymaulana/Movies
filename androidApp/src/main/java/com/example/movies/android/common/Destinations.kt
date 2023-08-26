@@ -20,6 +20,17 @@ object Register : Destination {
         get() = route
 }
 
+object PreLogin : Destination {
+    override val title: String
+        get() = "PreLogin"
+
+    override val route: String
+        get() = "preLogin"
+
+    override val routeWithArgs: String
+        get() = route
+}
+
 object Login : Destination {
     override val title: String
         get() = "Login"
@@ -91,5 +102,5 @@ object Account : Destination {
 
 
 val movieDestinations = listOf(
-    Register, Login, Home, Detail, Category, MovieFav, Account
+    Register, Login, Home, Detail, Category, MovieFav, Account, PreLogin
 )
