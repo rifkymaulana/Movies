@@ -6,7 +6,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-class GetMoviesNowPlayingUseCase: KoinComponent {
+class GetMoviesNowPlayingUseCase : KoinComponent {
     private val repository: MovieRepository by inject()
 
     @Throws(Exception::class)

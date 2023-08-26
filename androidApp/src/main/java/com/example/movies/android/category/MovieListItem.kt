@@ -29,20 +29,14 @@ import coil.compose.AsyncImage
 import com.example.movies.android.R
 import com.example.movies.android.data.Movie
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
 fun MovieListItem(
-    modifier: Modifier = Modifier,
-    movie: Movie,
-    onMovieClick: (Movie) -> Unit
+    modifier: Modifier = Modifier, movie: Movie, onMovieClick: (Movie) -> Unit
 ) {
     Card(
-        modifier = modifier
-            .clickable { onMovieClick(movie) },
-        shape = RoundedCornerShape(8.dp)
+        modifier = modifier.clickable { onMovieClick(movie) }, shape = RoundedCornerShape(8.dp)
     ) {
         Column {
             Box(
@@ -61,8 +55,7 @@ fun MovieListItem(
 
                 Surface(
                     color = Color.Black.copy(alpha = 0.6f),
-                    modifier = Modifier
-                        .size(50.dp),
+                    modifier = Modifier.size(50.dp),
                     shape = CircleShape
                 ) {
                     Image(
@@ -97,8 +90,7 @@ fun MovieListItem(
                 val formattedDate = outputFormatter.format(releaseDate)
 
                 Text(
-                    text = formattedDate,
-                    style = MaterialTheme.typography.caption
+                    text = formattedDate, style = MaterialTheme.typography.caption
                 )
             }
         }

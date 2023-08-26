@@ -53,9 +53,7 @@ object Detail : Destination {
     override val routeWithArgs: String
         get() = "$route/{movieId}"
 
-    val arguments = listOf(
-        navArgument(name = "movieId") { type = NavType.IntType }
-    )
+    val arguments = listOf(navArgument(name = "movieId") { type = NavType.IntType })
 }
 
 object Category : Destination {
@@ -69,7 +67,17 @@ object Category : Destination {
         get() = route
 }
 
-// account
+object MovieFav : Destination {
+    override val title: String
+        get() = "MovieFav"
+
+    override val route: String
+        get() = "movieFav"
+
+    override val routeWithArgs: String
+        get() = route
+}
+
 object Account : Destination {
     override val title: String
         get() = "Account"
@@ -83,9 +91,5 @@ object Account : Destination {
 
 
 val movieDestinations = listOf(
-    Register,
-    Login,
-    Home,
-    Detail,
-    Category
+    Register, Login, Home, Detail, Category, MovieFav, Account
 )

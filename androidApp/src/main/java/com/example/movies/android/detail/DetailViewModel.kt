@@ -10,8 +10,7 @@ import com.example.movies.domain.usecase.GetMovieUseCase
 import kotlinx.coroutines.launch
 
 class DetailViewModel(
-    val getMovieUseCase: GetMovieUseCase,
-    val movieId: Int
+    val getMovieUseCase: GetMovieUseCase, val movieId: Int
 ) : ViewModel() {
     var uiState by mutableStateOf(DetailScreenState())
 
@@ -28,8 +27,7 @@ class DetailViewModel(
                 uiState.copy(loading = false, movie = movie)
             } catch (error: Throwable) {
                 uiState.copy(
-                    loading = false,
-                    errorMessage = "Could not load the movie"
+                    loading = false, errorMessage = "Could not load the movie"
                 )
             }
         }
@@ -37,7 +35,5 @@ class DetailViewModel(
 }
 
 data class DetailScreenState(
-    var loading: Boolean = false,
-    var movie: Movie? = null,
-    var errorMessage: String? = null
+    var loading: Boolean = false, var movie: Movie? = null, var errorMessage: String? = null
 )

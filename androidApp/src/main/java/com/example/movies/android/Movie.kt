@@ -9,9 +9,9 @@ import org.koin.core.context.startKoin
 
 class Movie : Application() {
     val database by lazy {
-        Room.databaseBuilder(this, AppDatabase::class.java, "AppDatabase")
-            .build()
+        Room.databaseBuilder(this, AppDatabase::class.java, "AppDatabase").build()
     }
+
     override fun onCreate() {
         super.onCreate()
         startKoin {

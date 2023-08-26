@@ -1,4 +1,4 @@
-package com.example.movies.android.home
+package com.example.movies.android.moviefav
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,19 +27,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.movies.android.Red
-import com.example.movies.android.login.accountLogin
+import com.example.movies.android.home.HomeScreenState
+import com.example.movies.android.home.MovieListItem
 import com.example.movies.domain.model.Movie
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun HomeScreen(
+fun MovieFavScreen(
     modifier: Modifier = Modifier,
     uiState: HomeScreenState,
     loadNextMovies: (Boolean) -> Unit,
     navigateToDetail: (Movie) -> Unit
 ) {
-    val accountLogin = accountLogin
-
     val pullRefreshState = rememberPullRefreshState(
         refreshing = uiState.refreshing,
         onRefresh = { loadNextMovies(true) })
@@ -59,7 +58,7 @@ fun HomeScreen(
             ) {
 
                 Text(
-                    text = "Welcome to Movies, ${accountLogin?.name ?: "User"}!",
+                    text = "Welcome to Movies, User!",
                     style = MaterialTheme.typography.h5,
                     textAlign = TextAlign.Center,
                     modifier = modifier

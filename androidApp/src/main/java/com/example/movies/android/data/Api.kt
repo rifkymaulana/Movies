@@ -6,7 +6,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Header
 
-const val AUTHORIZATION_HEADER: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMmNjOTA3YTViMTI5MTM3OTkyNDBhZjIzOGY1ODBlYSIsInN1YiI6IjY0ZTVmMzg5ZTg5NGE2MDEzYmFmMzIyMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._koYRpzgBpXcG1RkYnwKGWjMC3f7LEyY10wq_FRYAGA"
+const val AUTHORIZATION_HEADER: String =
+    "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMmNjOTA3YTViMTI5MTM3OTkyNDBhZjIzOGY1ODBlYSIsInN1YiI6IjY0ZTVmMzg5ZTg5NGE2MDEzYmFmMzIyMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._koYRpzgBpXcG1RkYnwKGWjMC3f7LEyY10wq_FRYAGA"
 
 data class Movies(
     val results: List<Movie>?
@@ -45,14 +46,11 @@ interface MovieApiService {
 object RetrofitInstance {
     private const val BASE_URL = "https://api.themoviedb.org/3/"
 
-    val retrofit: Retrofit = Retrofit
-        .Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .client(OkHttpClient.Builder().build())
-        .build()
+    val retrofit: Retrofit =
+        Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create())
+            .client(OkHttpClient.Builder().build()).build()
 }
 
-val movieApiService:MovieApiService = RetrofitInstance.retrofit.create(MovieApiService::class.java)
+val movieApiService: MovieApiService = RetrofitInstance.retrofit.create(MovieApiService::class.java)
 
 

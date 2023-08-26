@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.movies.android.account.AccountScreen
 import com.example.movies.android.category.CategoryScreen
 import com.example.movies.android.common.Account
 import com.example.movies.android.common.Category
@@ -21,17 +22,20 @@ import com.example.movies.android.common.Detail
 import com.example.movies.android.common.Home
 import com.example.movies.android.common.Login
 import com.example.movies.android.common.MovieBottomBar
+import com.example.movies.android.common.MovieFav
 import com.example.movies.android.common.Register
 import com.example.movies.android.common.movieDestinations
 import com.example.movies.android.detail.DetailScreen
 import com.example.movies.android.detail.DetailViewModel
 import com.example.movies.android.home.HomeScreen
 import com.example.movies.android.home.HomeViewModel
-import com.example.movies.android.login.LoginScreen
+import com.example.movies.android.login.PreLoginScreen
+import com.example.movies.android.moviefav.MovieFavScreen
 import com.example.movies.android.register.RegisterScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
+
 
 @Composable
 fun MovieApp() {
@@ -54,37 +58,13 @@ fun MovieApp() {
         backStackEntry?.destination?.route == it.route || backStackEntry?.destination?.route == it.routeWithArgs
     }
 
-    Scaffold(
-        scaffoldState = scaffoldState,
-
-        /*topBar = {
-            currentScreen?.let { screen ->
-                if (screen != Login) {
-                    if (screen == Home) {
-                        MovieAppBar(
-                            canNavigateBack = false,
-                            currentScreen = screen
-                        ) {
-                        }
-                    } else {
-                        MovieAppBar(
-                            canNavigateBack = navController.previousBackStackEntry != null,
-                            currentScreen = screen
-                        ) {
-                            navController.navigateUp()
-                        }
-                    }
-                }
+    Scaffold(scaffoldState = scaffoldState, bottomBar = {
+        currentScreen?.let { screen ->
+            if (screen != Login && screen != Register) {
+                MovieBottomBar(navController)
             }
-        }*/
-
-        bottomBar = {
-            currentScreen?.let { screen ->
-                if (screen != Login && screen != Register) {
-                    MovieBottomBar(navController)
-                }
-            }
-        }) { innerPaddings ->
+        }
+    }) { innerPaddings ->
         NavHost(
             navController = navController,
             modifier = Modifier.padding(innerPaddings),
@@ -96,7 +76,7 @@ fun MovieApp() {
             }
 
             composable(Login.route) {
-                LoginScreen(navController)
+                PreLoginScreen(navController)
             }
 
             composable(Home.routeWithArgs) {
@@ -119,13 +99,26 @@ fun MovieApp() {
             }
 
             composable(Category.routeWithArgs) {
-                CategoryScreen(
-                    navigateToDetail = {
-                        navController.navigate(
-                            "${Detail.route}/${it.id}"
-                        )
-                    }
-                )
+                CategoryScreen(navigateToDetail = {
+                    navController.navigate(
+                        "${Detail.route}/${it.id}"
+                    )
+                })
+            }
+
+            composable(MovieFav.routeWithArgs) {
+                val homeViewModel: HomeViewModel = koinViewModel()
+                MovieFavScreen(uiState = homeViewModel.uiState, loadNextMovies = {
+                    homeViewModel.loadMovies(forceReload = it)
+                }, navigateToDetail = {
+                    navController.navigate(
+                        "${Detail.route}/${it.id}"
+                    )
+                })
+            }
+
+            composable(Account.routeWithArgs) {
+                AccountScreen(navController)
             }
         }
     }

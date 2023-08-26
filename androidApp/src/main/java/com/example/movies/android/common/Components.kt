@@ -43,7 +43,7 @@ fun TextField(
 
     OutlinedTextField(
         value = textField.value,
-        onValueChange = {  },
+        onValueChange = { },
         label = { Text(text = text) },
         leadingIcon = {
             Icon(
@@ -56,9 +56,7 @@ fun TextField(
             .fillMaxWidth()
             .clip(shape = RoundedCornerShape(4.dp)),
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Primary,
-            focusedLabelColor = Primary,
-            cursorColor = Primary
+            focusedBorderColor = Primary, focusedLabelColor = Primary, cursorColor = Primary
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
     )
@@ -66,9 +64,7 @@ fun TextField(
 
 @Composable
 fun PasswordField(
-    text: String,
-    icon: Painter,
-    modifier: Modifier = Modifier
+    text: String, icon: Painter, modifier: Modifier = Modifier
 ) {
     val localFocusManager = LocalFocusManager.current
 

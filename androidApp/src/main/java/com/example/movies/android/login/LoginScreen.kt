@@ -44,11 +44,35 @@ import com.example.movies.android.ui.Primary
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 data class LoginInput(
-    val email: String,
-    val password: String
+    val email: String, val password: String
 )
+
+public var accountLogin: AccountEntity? = null
+
+@Composable
+fun PreLoginScreen(navController: NavController) {
+    val context = LocalContext.current
+    val application = context.applicationContext as Movie
+    val database = application.database
+    val accountDao = database.accountDao()
+
+    // Check if the user is already logged in
+    LaunchedEffect(key1 = true) {
+        val account = withContext(Dispatchers.IO) {
+            accountDao.getAccountByIsLogin(true)
+        }
+
+        if (account != null) {
+            accountLogin = account
+            navController.navigate("home")
+        } else {
+            navController.navigate("login")
+        }
+    }
+}
 
 @Composable
 fun LoginScreen(
@@ -59,16 +83,8 @@ fun LoginScreen(
 
     // move to home if user is already logged in
     val application = context.applicationContext as Movie
-    val database = (application as Movie).database
+    val database = application.database
     val accountDao = database.accountDao()
-
-    LaunchedEffect(key1 = true) {
-        val account = accountDao.getAccountByIsLogin(true)
-
-        if (account != null) {
-            navController.navigate("home")
-        }
-    }
 
     Box {
         Column(
@@ -95,9 +111,7 @@ fun LoginScreen(
                     .fillMaxWidth()
                     .clip(shape = RoundedCornerShape(4.dp)),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Primary,
-                    focusedLabelColor = Primary,
-                    cursorColor = Primary
+                    focusedBorderColor = Primary, focusedLabelColor = Primary, cursorColor = Primary
                 ),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
             )
@@ -159,42 +173,33 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            Button(
-                text = stringResource(R.string.login),
-                onClick = {
-                    val input = loginInput.value
-                    var account: AccountEntity? = null
+            Button(text = stringResource(R.string.login), onClick = {
+                val input = loginInput.value
+                var account: AccountEntity? = null
 
-                    CoroutineScope(Dispatchers.IO).launch {
-                        // check email and password in database is correct
-                        account =
-                            accountDao.getAccountByEmailAndPassword(input.email, input.password)
-                    }
-
-                    // if account is null, email or password is incorrect
-                    if (account == null) {
-                        return@Button
-                    }
-
-                    // update isLogin to true when user login
-                    CoroutineScope(Dispatchers.IO).launch {
+                CoroutineScope(Dispatchers.IO).launch {
+                    // check email and password in database is correct
+                    account = accountDao.getAccountByEmailAndPassword(input.email, input.password)
+                    if (account != null) {
                         accountDao.updateAccount(account!!.id, true)
                     }
 
-                    // navigate to home screen
-                    navController.navigate("home")
                 }
-            )
+
+                if (account == null) {
+                    return@Button
+                }
+
+                // navigate to home screen
+                navController.navigate("home")
+            })
 
             Spacer(modifier = Modifier.height(10.dp))
 
             // don't have an account? navigate to register screen
-            Button(
-                text = stringResource(R.string.register),
-                onClick = {
-                    navController.navigate("register")
-                }
-            )
+            Button(text = stringResource(R.string.register), onClick = {
+                navController.navigate("register")
+            })
 
         }
 

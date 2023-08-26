@@ -45,9 +45,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 data class RegistrationInput(
-    val name: String,
-    val email: String,
-    val password: String
+    val name: String, val email: String, val password: String
 )
 
 @Composable
@@ -64,15 +62,15 @@ fun RegisterScreen(
                 .padding(28.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            OutlinedTextField(
-                value = registrationInput.value.name,
+            OutlinedTextField(value = registrationInput.value.name,
                 onValueChange = { newValue ->
                     registrationInput.value = registrationInput.value.copy(name = newValue)
                 },
                 label = { Text(text = "Name") },
                 leadingIcon = {
                     Icon(
-                        painter = painterResource(id = R.drawable.message), contentDescription = null
+                        painter = painterResource(id = R.drawable.message),
+                        contentDescription = null
                     )
                 },
                 singleLine = true,
@@ -81,22 +79,20 @@ fun RegisterScreen(
                     .fillMaxWidth()
                     .clip(shape = RoundedCornerShape(4.dp)),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Primary,
-                    focusedLabelColor = Primary,
-                    cursorColor = Primary
+                    focusedBorderColor = Primary, focusedLabelColor = Primary, cursorColor = Primary
                 ),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
             )
 
-            OutlinedTextField(
-                value = registrationInput.value.email,
+            OutlinedTextField(value = registrationInput.value.email,
                 onValueChange = { newValue ->
                     registrationInput.value = registrationInput.value.copy(email = newValue)
                 },
                 label = { Text(text = "Email") },
                 leadingIcon = {
                     Icon(
-                        painter = painterResource(id = R.drawable.message), contentDescription = null
+                        painter = painterResource(id = R.drawable.message),
+                        contentDescription = null
                     )
                 },
                 singleLine = true,
@@ -105,9 +101,7 @@ fun RegisterScreen(
                     .fillMaxWidth()
                     .clip(shape = RoundedCornerShape(4.dp)),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Primary,
-                    focusedLabelColor = Primary,
-                    cursorColor = Primary
+                    focusedBorderColor = Primary, focusedLabelColor = Primary, cursorColor = Primary
                 ),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
             )
@@ -137,7 +131,12 @@ fun RegisterScreen(
                 onValueChange = { newValue ->
                     registrationInput.value = registrationInput.value.copy(password = newValue)
                 },
-                leadingIcon = { Icon(painter = painterResource(id = R.drawable.baseline_lock_18), contentDescription = "") },
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_lock_18),
+                        contentDescription = ""
+                    )
+                },
                 trailingIcon = {
                     val iconImage = if (passwordVisible.value) {
                         Icons.Filled.Visibility
@@ -164,37 +163,29 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            Button(
-                text = stringResource(R.string.register),
-                onClick = {
-                    val application = context.applicationContext as Movie
-                    val database = (application as Movie).database
-                    val accountDao = database.accountDao()
+            Button(text = stringResource(R.string.register), onClick = {
+                val application = context.applicationContext as Movie
+                val database = application.database
+                val accountDao = database.accountDao()
 
-                    val input = registrationInput.value
+                val input = registrationInput.value
 
-                    val accountEntity = AccountEntity(
-                        name = input.name,
-                        email = input.email,
-                        password = input.password
-                    )
-                    CoroutineScope(Dispatchers.IO).launch {
-                        accountDao.insertAccount(accountEntity)
-                    }
-                    navController.popBackStack()
-                    navController.navigate("login")
+                val accountEntity = AccountEntity(
+                    name = input.name, email = input.email, password = input.password
+                )
+                CoroutineScope(Dispatchers.IO).launch {
+                    accountDao.insertAccount(accountEntity)
                 }
-            )
+                navController.popBackStack()
+                navController.navigate("login")
+            })
 
             Spacer(modifier = Modifier.height(10.dp))
 
             // don't have an account? navigate to register screen
-            Button(
-                text = stringResource(R.string.login),
-                onClick = {
-                    navController.navigate("login")
-                }
-            )
+            Button(text = stringResource(R.string.login), onClick = {
+                navController.navigate("login")
+            })
         }
 
     }

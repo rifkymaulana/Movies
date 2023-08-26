@@ -38,9 +38,7 @@ fun MyApplicationTheme(
     }
     val typography = Typography(
         body1 = TextStyle(
-            fontFamily = FontFamily.Default,
-            fontWeight = FontWeight.Normal,
-            fontSize = 16.sp
+            fontFamily = FontFamily.Default, fontWeight = FontWeight.Normal, fontSize = 16.sp
         )
     )
     val shapes = Shapes(
@@ -50,10 +48,7 @@ fun MyApplicationTheme(
     )
 
     MaterialTheme(
-        colors = colors,
-        typography = typography,
-        shapes = shapes,
-        content = content
+        colors = colors, typography = typography, shapes = shapes, content = content
     )
 }
 

@@ -11,13 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -29,12 +25,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.movies.android.Red
 import com.example.movies.android.data.AUTHORIZATION_HEADER
 import com.example.movies.android.data.Movie
 import com.example.movies.android.data.Movies
 import com.example.movies.android.data.movieApiService
-import com.example.movies.android.home.HomeScreenState
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -103,10 +97,7 @@ fun CategoryScreen(navigateToDetail: (com.example.movies.domain.model.Movie) -> 
                     contentPadding = PaddingValues(16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    itemsIndexed(
-                        movieNowPlaying,
-                        key = { _, movie -> movie.id }
-                    ) { _, movie ->
+                    itemsIndexed(movieNowPlaying, key = { _, movie -> movie.id }) { _, movie ->
                         MovieListItem(movie = movie, onMovieClick = {
                             // convert movie data class to movie domain model
                             val movieDomainModel = com.example.movies.domain.model.Movie(
@@ -144,10 +135,7 @@ fun CategoryScreen(navigateToDetail: (com.example.movies.domain.model.Movie) -> 
                     contentPadding = PaddingValues(16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    itemsIndexed(
-                        moviePopular,
-                        key = { _, movie -> movie.id }
-                    ) { _, movie ->
+                    itemsIndexed(moviePopular, key = { _, movie -> movie.id }) { _, movie ->
                         MovieListItem(movie = movie, onMovieClick = {
                             // convert movie data class to movie domain model
                             val movieDomainModel = com.example.movies.domain.model.Movie(
@@ -185,10 +173,7 @@ fun CategoryScreen(navigateToDetail: (com.example.movies.domain.model.Movie) -> 
                     contentPadding = PaddingValues(16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    itemsIndexed(
-                        movieTopRated,
-                        key = { _, movie -> movie.id }
-                    ) { _, movie ->
+                    itemsIndexed(movieTopRated, key = { _, movie -> movie.id }) { _, movie ->
                         MovieListItem(movie = movie, onMovieClick = {
                             // convert movie data class to movie domain model
                             val movieDomainModel = com.example.movies.domain.model.Movie(
@@ -226,10 +211,7 @@ fun CategoryScreen(navigateToDetail: (com.example.movies.domain.model.Movie) -> 
                     contentPadding = PaddingValues(16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    itemsIndexed(
-                        movieUpcoming,
-                        key = { _, movie -> movie.id }
-                    ) { _, movie ->
+                    itemsIndexed(movieUpcoming, key = { _, movie -> movie.id }) { _, movie ->
                         MovieListItem(movie = movie, onMovieClick = {
                             // convert movie data class to movie domain model
                             val movieDomainModel = com.example.movies.domain.model.Movie(
