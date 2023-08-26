@@ -69,6 +69,19 @@ object Category : Destination {
         get() = route
 }
 
+// account
+object Account : Destination {
+    override val title: String
+        get() = "Account"
+
+    override val route: String
+        get() = "account"
+
+    override val routeWithArgs: String
+        get() = route
+}
+
+
 val movieDestinations = listOf(
     Register,
     Login,

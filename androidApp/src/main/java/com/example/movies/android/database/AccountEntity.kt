@@ -8,5 +8,6 @@ data class AccountEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
     val email: String,
-    val password: String
+    val password: String,
+    val is_login: Boolean = false
 )

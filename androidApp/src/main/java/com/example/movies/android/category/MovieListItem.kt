@@ -81,7 +81,7 @@ fun MovieListItem(
                 modifier = Modifier.padding(10.dp)
             ) {
                 Text(
-                    text = movie.title.take(25) + if (movie.title.length > 25) "..." else "",
+                    text = movie.title.take(12) + if (movie.title.length > 25) "..." else "",
                     style = MaterialTheme.typography.subtitle1,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,

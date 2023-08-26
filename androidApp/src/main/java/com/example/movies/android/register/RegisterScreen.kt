@@ -35,10 +35,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.movies.android.Movie
 import com.example.movies.android.R
 import com.example.movies.android.common.Button
 import com.example.movies.android.database.AccountEntity
-import com.example.movies.android.database.ApplicationDatabase
 import com.example.movies.android.ui.Primary
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -167,8 +167,8 @@ fun RegisterScreen(
             Button(
                 text = stringResource(R.string.register),
                 onClick = {
-                    val application = context.applicationContext as ApplicationDatabase
-                    val database = (application as ApplicationDatabase).database
+                    val application = context.applicationContext as Movie
+                    val database = (application as Movie).database
                     val accountDao = database.accountDao()
 
                     val input = registrationInput.value
@@ -182,6 +182,16 @@ fun RegisterScreen(
                         accountDao.insertAccount(accountEntity)
                     }
                     navController.popBackStack()
+                    navController.navigate("login")
+                }
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // don't have an account? navigate to register screen
+            Button(
+                text = stringResource(R.string.login),
+                onClick = {
                     navController.navigate("login")
                 }
             )

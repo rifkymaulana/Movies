@@ -39,8 +39,7 @@ fun HomeScreen(
 ) {
     val pullRefreshState = rememberPullRefreshState(
         refreshing = uiState.refreshing,
-        onRefresh = { loadNextMovies(true) }
-    )
+        onRefresh = { loadNextMovies(true) })
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -55,6 +54,7 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+
                 Text(
                     text = "Welcome to Movies, User!",
                     style = MaterialTheme.typography.h5,
@@ -73,8 +73,7 @@ fun HomeScreen(
             ) {
                 itemsIndexed(
                     uiState.movies,
-                    key = { _, movie -> movie.id + Math.random() }
-                ) { index, movie ->
+                    key = { _, movie -> movie.id + Math.random() }) { index, movie ->
 
                     MovieListItem(movie = movie, onMovieClick = { navigateToDetail(movie) })
 
