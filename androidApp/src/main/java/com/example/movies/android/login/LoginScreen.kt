@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -24,6 +26,8 @@ import com.example.movies.android.common.TextField
 fun LoginScreen(
     navController: NavController
 ) {
+
+
     Box {
         Column(
             modifier = Modifier
@@ -31,16 +35,6 @@ fun LoginScreen(
                 .padding(28.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            TextField(
-                text = "Email",
-                icon = painterResource(id = R.drawable.message)
-            )
-
-            PasswordField(
-                text = "Password",
-                icon = painterResource(id = R.drawable.baseline_lock_18)
-            )
-
             Spacer(modifier = Modifier.height(10.dp))
 
             Button(

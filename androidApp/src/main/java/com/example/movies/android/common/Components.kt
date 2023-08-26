@@ -43,7 +43,7 @@ fun TextField(
 
     OutlinedTextField(
         value = textField.value,
-        onValueChange = { textField.value = it },
+        onValueChange = {  },
         label = { Text(text = text) },
         leadingIcon = {
             Icon(
@@ -97,9 +97,7 @@ fun PasswordField(
         },
         maxLines = 1,
         value = password.value,
-        onValueChange = {
-            password.value = it
-        },
+        onValueChange = { },
         leadingIcon = { Icon(painter = icon, contentDescription = "") },
         trailingIcon = {
             val iconImage = if (passwordVisible.value) {

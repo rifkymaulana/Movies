@@ -15,7 +15,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.movies.android.category.CategoryScreen
-import com.example.movies.android.category.CategoryViewModel
 import com.example.movies.android.common.Category
 import com.example.movies.android.common.Detail
 import com.example.movies.android.common.Home
