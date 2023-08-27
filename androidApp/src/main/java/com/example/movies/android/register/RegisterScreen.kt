@@ -1,5 +1,6 @@
 package com.example.movies.android.register
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -49,7 +50,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 data class RegistrationInput(
-    val name: String, val email: String, val password: String
+    val name: String, val email: String, val password: String, val confirmPassword: String
 )
 
 @Composable
@@ -57,7 +58,7 @@ fun RegisterScreen(
     navController: NavController
 ) {
     val context = LocalContext.current
-    val registrationInput = remember { mutableStateOf(RegistrationInput("", "", "")) }
+    val registrationInput = remember { mutableStateOf(RegistrationInput("", "", "", "")) }
 
     Box {
         Column(
@@ -176,6 +177,56 @@ fun RegisterScreen(
                 }
             )
 
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(shape = RoundedCornerShape(4.dp)),
+                label = { Text(text = "Confirm Password") },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Primary, focusedLabelColor = Primary, cursorColor = Primary
+                ),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password, imeAction = ImeAction.Done
+                ),
+                singleLine = true,
+                keyboardActions = KeyboardActions {
+                    localFocusManager.clearFocus()
+                },
+                maxLines = 1,
+                value = registrationInput.value.confirmPassword,
+                onValueChange = { newValue ->
+                    registrationInput.value = registrationInput.value.copy(confirmPassword = newValue)
+                },
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_lock_18),
+                        contentDescription = ""
+                    )
+                },
+                trailingIcon = {
+                    val iconImage = if (passwordVisible.value) {
+                        Icons.Filled.Visibility
+                    } else {
+                        Icons.Filled.VisibilityOff
+                    }
+
+                    val description = if (passwordVisible.value) {
+                        stringResource(id = R.string.hide_password)
+                    } else {
+                        stringResource(id = R.string.show_password)
+                    }
+
+                    IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
+                        Icon(imageVector = iconImage, contentDescription = description)
+                    }
+                },
+                visualTransformation = if (passwordVisible.value) {
+                    VisualTransformation.None
+                } else {
+                    PasswordVisualTransformation()
+                }
+            )
+
             Spacer(modifier = Modifier.height(10.dp))
 
             Button(text = stringResource(R.string.register), onClick = {
@@ -188,11 +239,53 @@ fun RegisterScreen(
                 val accountEntity = AccountEntity(
                     name = input.name, email = input.email, password = input.password
                 )
-                CoroutineScope(Dispatchers.IO).launch {
-                    accountDao.insertAccount(accountEntity)
+
+                val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
+                val email = input.email
+                val emailValidation = email.matches(emailPattern.toRegex())
+
+                val passwordPattern =
+                    "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}"
+                val passwordRegex = input.password
+                val passwordRegexValidation = passwordRegex.matches(passwordPattern.toRegex())
+
+                val password = input.password
+                val confirmPassword = input.confirmPassword
+                val passwordValidation = password == confirmPassword
+
+                when {
+                    input.name.isEmpty() || input.email.isEmpty() || input.password.isEmpty() -> {
+                        Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+
+                    !emailValidation -> {
+                        Toast.makeText(context, "Invalid email", Toast.LENGTH_SHORT).show()
+                    }
+
+                    !passwordRegexValidation -> {
+                        Toast.makeText(
+                            context,
+                            "Password must contain at least 1 lowercase, 1 uppercase, 1 number, 1 special character, and 8 characters or more",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    passwordValidation -> {
+                        Toast.makeText(context, "Password not match", Toast.LENGTH_SHORT).show()
+                    }
+
+                    else -> {
+
+                        CoroutineScope(Dispatchers.IO).launch {
+                            accountDao.insertAccount(accountEntity)
+                            navController.navigate("login")
+                            Toast.makeText(
+                                context, "Account created successfully", Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 }
-                navController.popBackStack()
-                navController.navigate("login")
             })
 
             Spacer(modifier = Modifier.height(10.dp))
