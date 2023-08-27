@@ -48,6 +48,7 @@ import com.example.movies.android.ui.Primary
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 data class RegistrationInput(
     val name: String, val email: String, val password: String, val confirmPassword: String
@@ -177,7 +178,7 @@ fun RegisterScreen(
                 }
             )
 
-            OutlinedTextField(
+            /*OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(shape = RoundedCornerShape(4.dp)),
@@ -225,7 +226,7 @@ fun RegisterScreen(
                 } else {
                     PasswordVisualTransformation()
                 }
-            )
+            )*/
 
             Spacer(modifier = Modifier.height(10.dp))
 
@@ -249,10 +250,6 @@ fun RegisterScreen(
                 val passwordRegex = input.password
                 val passwordRegexValidation = passwordRegex.matches(passwordPattern.toRegex())
 
-                val password = input.password
-                val confirmPassword = input.confirmPassword
-                val passwordValidation = password == confirmPassword
-
                 when {
                     input.name.isEmpty() || input.email.isEmpty() || input.password.isEmpty() -> {
                         Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT)
@@ -271,18 +268,16 @@ fun RegisterScreen(
                         ).show()
                     }
 
-                    passwordValidation -> {
-                        Toast.makeText(context, "Password not match", Toast.LENGTH_SHORT).show()
-                    }
-
                     else -> {
 
                         CoroutineScope(Dispatchers.IO).launch {
-                            accountDao.insertAccount(accountEntity)
-                            navController.navigate("login")
-                            Toast.makeText(
-                                context, "Account created successfully", Toast.LENGTH_SHORT
-                            ).show()
+                            withContext(Dispatchers.Main) {
+                                accountDao.insertAccount(accountEntity)
+                                navController.navigate("login")
+                                Toast.makeText(
+                                    context, "Account created successfully", Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                     }
                 }

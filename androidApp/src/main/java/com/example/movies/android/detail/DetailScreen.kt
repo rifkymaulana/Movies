@@ -103,6 +103,7 @@ fun DetailScreen(
 
                                 account?.let { nonNullAccount ->
                                     val movieFavEntity = MovieFavEntity(
+                                        movie_id = movie.id,
                                         title = movie.title,
                                         poster_path = movie.imageUrl,
                                         overview = movie.description,
@@ -131,7 +132,7 @@ fun DetailScreen(
                         )
                         Spacer(modifier = modifier.width(8.dp))
 
-                        Text(text = "Start watching now", color = Color.White)
+                        Text(text = "Add to Favorite", color = Color.White)
                     }
 
                     Spacer(modifier = modifier.height(16.dp))

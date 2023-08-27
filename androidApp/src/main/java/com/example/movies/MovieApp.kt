@@ -113,9 +113,7 @@ fun MovieApp() {
 
             composable(MovieFav.routeWithArgs) {
                 val homeViewModel: HomeViewModel = koinViewModel()
-                MovieFavScreen(uiState = homeViewModel.uiState, loadNextMovies = {
-                    homeViewModel.loadMovies(forceReload = it)
-                }, navigateToDetail = {
+                MovieFavScreen(navigateToDetail = {
                     navController.navigate(
                         "${Detail.route}/${it.id}"
                     )
