@@ -1,5 +1,6 @@
 package com.example.movies.android.login
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -174,24 +175,25 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(10.dp))
 
             Button(text = stringResource(R.string.login), onClick = {
-                val input = loginInput.value
-                var account: AccountEntity? = null
+                val email = loginInput.value.email
+                val password = loginInput.value.password
+
+                val accountDao = (context.applicationContext as Movie).database.accountDao()
 
                 CoroutineScope(Dispatchers.IO).launch {
-                    // check email and password in database is correct
-                    account = accountDao.getAccountByEmailAndPassword(input.email, input.password)
-                    if (account != null) {
-                        accountDao.updateAccount(account!!.id, true)
+                    val account = accountDao.getAccountByEmailAndPassword(email, password)
+
+                    withContext(Dispatchers.Main) {
+                        if (account != null) {
+                            accountLogin = account
+                            accountDao.updateAccount(account.id, true)
+                            navController.navigate("home")
+                        } else {
+                            Toast.makeText(context, "Invalid email or password", Toast.LENGTH_SHORT)
+                                .show()
+                        }
                     }
-
                 }
-
-                if (account == null) {
-                    return@Button
-                }
-
-                // navigate to home screen
-                navController.navigate("home")
             })
 
             Spacer(modifier = Modifier.height(10.dp))
