@@ -63,14 +63,10 @@ fun AccountScreen(navController: NavController) {
                     val account = accountDao.getAccountByIsLogin(true)
 
                     account?.let { nonNullAccount ->
-                        // Switch to the main thread to update Composables
                         withContext(Dispatchers.Main) {
-                            // Update Composables here
                             accountDao.updateAccount(nonNullAccount.id, false)
+                            navController.navigate("login")
                         }
-
-                        // Navigate to login screen
-                        navController.navigate("login")
                     }
                 }
             },
