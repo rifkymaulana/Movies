@@ -29,7 +29,7 @@ import kotlinx.coroutines.withContext
 fun AccountScreen(navController: NavController) {
     val context = LocalContext.current
     val application = context.applicationContext as Movie
-    val database = (application as Movie).database
+    val database = application.database
     val accountDao = database.accountDao()
 
     Column(
@@ -65,7 +65,9 @@ fun AccountScreen(navController: NavController) {
                     account?.let { nonNullAccount ->
                         withContext(Dispatchers.Main) {
                             accountDao.updateAccount(nonNullAccount.id, false)
-                            navController.navigate("login")
+                            navController.navigate("login") {
+                                popUpTo("login") { inclusive = true }
+                            }
                         }
                     }
                 }
