@@ -51,16 +51,13 @@ data class LoginInput(
     val email: String, val password: String
 )
 
-public var accountLogin: AccountEntity? = null
+var accountLogin: AccountEntity? = null
 
 @Composable
 fun PreLoginScreen(navController: NavController) {
     val context = LocalContext.current
-    val application = context.applicationContext as Movie
-    val database = application.database
-    val accountDao = database.accountDao()
+    val accountDao = (context.applicationContext as Movie).database.accountDao()
 
-    // Check if the user is already logged in
     LaunchedEffect(key1 = true) {
         val account = withContext(Dispatchers.IO) {
             accountDao.getAccountByIsLogin(true)
