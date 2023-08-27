@@ -1,5 +1,7 @@
 package com.example.movies.android.register
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -22,6 +25,7 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -62,14 +66,24 @@ fun RegisterScreen(
                 .padding(28.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            OutlinedTextField(value = registrationInput.value.name,
+            Image(
+                painter = painterResource(id = R.drawable.login),
+                contentDescription = null,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .fillMaxWidth()
+                    .size(250.dp)
+            )
+
+            OutlinedTextField(
+                value = registrationInput.value.name,
                 onValueChange = { newValue ->
                     registrationInput.value = registrationInput.value.copy(name = newValue)
                 },
                 label = { Text(text = "Name") },
                 leadingIcon = {
                     Icon(
-                        painter = painterResource(id = R.drawable.message),
+                        painter = painterResource(id = R.drawable.baseline_person_18),
                         contentDescription = null
                     )
                 },
@@ -84,7 +98,8 @@ fun RegisterScreen(
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
             )
 
-            OutlinedTextField(value = registrationInput.value.email,
+            OutlinedTextField(
+                value = registrationInput.value.email,
                 onValueChange = { newValue ->
                     registrationInput.value = registrationInput.value.copy(email = newValue)
                 },
@@ -182,10 +197,14 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            // don't have an account? navigate to register screen
-            Button(text = stringResource(R.string.login), onClick = {
-                navController.navigate("login")
-            })
+            Text(
+                text = "Already have an account? Login",
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .clickable(onClick = {
+                        navController.navigate("login")
+                    })
+            )
         }
 
     }
