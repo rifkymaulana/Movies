@@ -11,4 +11,7 @@ interface MovieFavDao {
 
     @Query("SELECT * FROM movies_fav WHERE user_id = :userId")
     suspend fun getAllByUserId(userId: Int): List<MovieFavEntity>?
+
+    @Query("DELETE FROM movies_fav WHERE movie_id = :movieId")
+    suspend fun deleteMovieFav(movieId: Int)
 }
