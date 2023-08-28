@@ -49,7 +49,7 @@ fun DetailScreen(
     modifier: Modifier = Modifier, uiState: DetailScreenState
 ) {
     val context = LocalContext.current
-    val application = context.applicationContext as com.example.movies.android.Movie
+    val application = context.applicationContext as Movie
     val database = application.database
     val movieFavDao = database.movieFavDao()
 
@@ -137,8 +137,7 @@ fun DetailScreen(
                     } else {
                         Button(
                             onClick = {
-                                val application = context.applicationContext as Movie
-                                val database = (application as Movie).database
+                                val database = (context.applicationContext as Movie).database
                                 val movieFavDao = database.movieFavDao()
                                 val accountDao = database.accountDao()
 

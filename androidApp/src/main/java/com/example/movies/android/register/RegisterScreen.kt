@@ -69,7 +69,7 @@ fun RegisterScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.login),
+                painter = painterResource(id = R.drawable.logo_white_no_background),
                 contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)

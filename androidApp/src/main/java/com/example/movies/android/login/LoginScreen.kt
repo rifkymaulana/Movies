@@ -96,7 +96,7 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.login),
+                painter = painterResource(id = R.drawable.logo_white_no_background),
                 contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -197,7 +197,11 @@ fun LoginScreen(
                         if (account != null) {
                             accountLogin = account
                             accountDao.updateAccount(account.id, true)
-                            navController.navigate("home")
+                            navController.navigate("preLogin") {
+                                popUpTo("preLogin") {
+                                    inclusive = true
+                                }
+                            }
                         } else {
                             Toast.makeText(context, "Invalid email or password", Toast.LENGTH_SHORT)
                                 .show()

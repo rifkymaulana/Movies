@@ -66,8 +66,10 @@ fun AccountScreen(navController: NavController) {
                     account?.let { nonNullAccount ->
                         withContext(Dispatchers.Main) {
                             accountDao.updateAccount(nonNullAccount.id, false)
-                            navController.navigate("login") {
-                                popUpTo("login") { inclusive = true }
+                            navController.navigate("preLogin") {
+                                popUpTo("preLogin") {
+                                    inclusive = true
+                                }
                             }
                         }
                     }

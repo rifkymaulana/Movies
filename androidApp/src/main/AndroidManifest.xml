@@ -6,7 +6,7 @@
     <application
         android:name=".Movie"
         android:label="@string/app_name"
-        android:icon="@drawable/logo"
+        android:icon="@drawable/logo_white_no_background"
         android:allowBackup="false"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
