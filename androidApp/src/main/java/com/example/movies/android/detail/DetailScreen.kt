@@ -34,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -195,7 +194,11 @@ fun DetailScreen(
                                     }
                                 }
 
-                                Toast.makeText(context, "Movie deleted from favorite", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    "Movie deleted from favorite",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             },
                             modifier = modifier
                                 .fillMaxWidth()
@@ -260,7 +263,11 @@ fun DetailScreen(
                                     }
                                 }
 
-                                Toast.makeText(context, "Movie added to favorite", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    "Movie added to favorite",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             },
                             modifier = modifier
                                 .fillMaxWidth()
