@@ -18,6 +18,11 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,15 +38,42 @@ import com.example.movies.android.Movie
 import com.example.movies.android.R
 import com.example.movies.android.Red
 import com.example.movies.android.database.MovieFavEntity
+import com.example.movies.android.login.accountLogin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun DetailScreen(
     modifier: Modifier = Modifier, uiState: DetailScreenState
 ) {
     val context = LocalContext.current
+    val application = context.applicationContext as com.example.movies.android.Movie
+    val database = application.database
+    val movieFavDao = database.movieFavDao()
+
+    var movieList by remember { mutableStateOf<List<com.example.movies.domain.model.Movie>?>(null) }
+
+    LaunchedEffect(key1 = true) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val movieFavList = movieFavDao.getAllByUserId(accountLogin!!.id)
+
+            val mappedMovieList = movieFavList?.map { movieFav ->
+                com.example.movies.domain.model.Movie(
+                    id = movieFav.movie_id,
+                    title = movieFav.title,
+                    description = movieFav.overview,
+                    imageUrl = movieFav.poster_path,
+                    releaseDate = movieFav.release_date
+                )
+            }
+
+            withContext(Dispatchers.Main) {
+                movieList = mappedMovieList
+            }
+        }
+    }
 
     Box(
         contentAlignment = Alignment.Center
@@ -91,48 +123,77 @@ fun DetailScreen(
                     )
                     Spacer(modifier = modifier.height(8.dp))
 
-                    Button(
-                        onClick = {
-                            val application = context.applicationContext as Movie
-                            val database = (application as Movie).database
-                            val movieFavDao = database.movieFavDao()
-                            val accountDao = database.accountDao()
+                    // check if movie is in favorite list
+                    val isMovieInFavoriteList = movieList?.any { movieFav ->
+                        movieFav.id == movie.id
+                    } ?: false
 
-                            CoroutineScope(Dispatchers.IO).launch {
-                                val account = accountDao.getAccountByIsLogin(true)
+                    if (isMovieInFavoriteList) {
+                        Text(
+                            text = "This movie is in your favorite list",
+                            style = MaterialTheme.typography.body2,
+                            color = Red
+                        )
+                    } else {
+                        Button(
+                            onClick = {
+                                val application = context.applicationContext as Movie
+                                val database = (application as Movie).database
+                                val movieFavDao = database.movieFavDao()
+                                val accountDao = database.accountDao()
 
-                                account?.let { nonNullAccount ->
-                                    val movieFavEntity = MovieFavEntity(
-                                        movie_id = movie.id,
-                                        title = movie.title,
-                                        poster_path = movie.imageUrl,
-                                        overview = movie.description,
-                                        release_date = movie.releaseDate,
-                                        user_id = nonNullAccount.id
-                                    )
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    val account = accountDao.getAccountByIsLogin(true)
 
-                                    movieFavDao.insertMovieFav(movieFavEntity)
+                                    account?.let { nonNullAccount ->
+                                        val movieFavEntity = MovieFavEntity(
+                                            movie_id = movie.id,
+                                            title = movie.title,
+                                            poster_path = movie.imageUrl,
+                                            overview = movie.description,
+                                            release_date = movie.releaseDate,
+                                            user_id = nonNullAccount.id
+                                        )
+
+                                        movieFavDao.insertMovieFav(movieFavEntity)
+
+                                        val movieFavList = movieFavDao.getAllByUserId(accountLogin!!.id)
+
+                                        val mappedMovieList = movieFavList?.map { movieFav ->
+                                            com.example.movies.domain.model.Movie(
+                                                id = movieFav.movie_id,
+                                                title = movieFav.title,
+                                                description = movieFav.overview,
+                                                imageUrl = movieFav.poster_path,
+                                                releaseDate = movieFav.release_date
+                                            )
+                                        }
+
+                                        withContext(Dispatchers.Main) {
+                                            movieList = mappedMovieList
+                                        }
+                                    }
                                 }
-                            }
-                        },
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .height(46.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Red
-                        ),
-                        elevation = ButtonDefaults.elevation(
-                            defaultElevation = 0.dp
-                        )
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.play_button),
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                        Spacer(modifier = modifier.width(8.dp))
+                            },
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .height(46.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = Red
+                            ),
+                            elevation = ButtonDefaults.elevation(
+                                defaultElevation = 0.dp
+                            )
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.play_button),
+                                contentDescription = null,
+                                tint = Color.White
+                            )
+                            Spacer(modifier = modifier.width(8.dp))
 
-                        Text(text = "Add to Favorite", color = Color.White)
+                            Text(text = "Add to Favorite", color = Color.White)
+                        }
                     }
 
                     Spacer(modifier = modifier.height(16.dp))

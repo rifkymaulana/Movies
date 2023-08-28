@@ -14,6 +14,7 @@ class DetailViewModel(
 ) : ViewModel() {
     var uiState by mutableStateOf(DetailScreenState())
 
+
     init {
         loadMovie(movieId)
     }
