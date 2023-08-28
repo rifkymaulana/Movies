@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.movies.android.Movie
+import com.example.movies.android.login.accountLogin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,7 +51,7 @@ fun AccountScreen(navController: NavController) {
         Spacer(modifier = Modifier.padding(8.dp))
 
         Text(
-            text = "Welcome, User!",
+            text = "Welcome, ${accountLogin?.name}!",
             style = MaterialTheme.typography.body1,
             textAlign = TextAlign.Center
         )

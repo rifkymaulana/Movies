@@ -80,7 +80,7 @@ fun MovieFavScreen(
             ) {
 
                 Text(
-                    text = "Welcome to Movies, User!",
+                    text = "Favorite Movies",
                     style = MaterialTheme.typography.h5,
                     textAlign = TextAlign.Center,
                     modifier = modifier
