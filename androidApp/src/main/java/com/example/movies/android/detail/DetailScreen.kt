@@ -157,21 +157,25 @@ fun DetailScreen(
 
                                         movieFavDao.insertMovieFav(movieFavEntity)
 
-                                        val movieFavList = movieFavDao.getAllByUserId(accountLogin!!.id)
-
-                                        val mappedMovieList = movieFavList?.map { movieFav ->
-                                            com.example.movies.domain.model.Movie(
-                                                id = movieFav.movie_id,
-                                                title = movieFav.title,
-                                                description = movieFav.overview,
-                                                imageUrl = movieFav.poster_path,
-                                                releaseDate = movieFav.release_date
-                                            )
-                                        }
-
                                         withContext(Dispatchers.Main) {
-                                            movieList = mappedMovieList
+                                            val movieFavList =
+                                                movieFavDao.getAllByUserId(accountLogin!!.id)
+
+                                            val mappedMovieList = movieFavList?.map { movieFav ->
+                                                com.example.movies.domain.model.Movie(
+                                                    id = movieFav.movie_id,
+                                                    title = movieFav.title,
+                                                    description = movieFav.overview,
+                                                    imageUrl = movieFav.poster_path,
+                                                    releaseDate = movieFav.release_date
+                                                )
+                                            }
+
+                                            withContext(Dispatchers.Main) {
+                                                movieList = mappedMovieList
+                                            }
                                         }
+
                                     }
                                 }
                             },
