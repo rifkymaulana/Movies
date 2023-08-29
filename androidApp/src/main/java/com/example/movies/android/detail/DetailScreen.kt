@@ -48,6 +48,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Composable
 fun DetailScreen(
@@ -195,9 +197,7 @@ fun DetailScreen(
                                 }
 
                                 Toast.makeText(
-                                    context,
-                                    "Movie deleted from favorite",
-                                    Toast.LENGTH_SHORT
+                                    context, "Movie deleted from favorite", Toast.LENGTH_SHORT
                                 ).show()
                             },
                             modifier = modifier
@@ -264,9 +264,7 @@ fun DetailScreen(
                                 }
 
                                 Toast.makeText(
-                                    context,
-                                    "Movie added to favorite",
-                                    Toast.LENGTH_SHORT
+                                    context, "Movie added to favorite", Toast.LENGTH_SHORT
                                 ).show()
                             },
                             modifier = modifier
@@ -292,8 +290,14 @@ fun DetailScreen(
 
                     Spacer(modifier = modifier.height(16.dp))
 
+                    val inputFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+                    val outputFormatter = SimpleDateFormat("d MMMM yyyy", Locale.ENGLISH)
+
+                    val releaseDate = inputFormatter.parse(movie.releaseDate)
+                    val formattedDate = outputFormatter.format(releaseDate)
+
                     Text(
-                        text = "Released in ${movie.releaseDate}".uppercase(),
+                        text = "Released in $formattedDate",
                         style = MaterialTheme.typography.overline
                     )
 
