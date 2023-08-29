@@ -28,6 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,6 +47,7 @@ import com.example.movies.android.database.MovieFavEntity
 import com.example.movies.android.login.accountLogin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
@@ -61,6 +63,10 @@ fun DetailScreen(
     val movieFavDao = database.movieFavDao()
 
     var movieList by remember { mutableStateOf<List<com.example.movies.domain.model.Movie>?>(null) }
+
+    // Show the automatic pop-up message for 3 seconds
+    val scope = rememberCoroutineScope()
+    var showMessage by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = true) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -125,16 +131,17 @@ fun DetailScreen(
                             .fillMaxSize(0.5f)
                     )
 
-                    Surface(
-                        color = Color.Transparent, modifier = Modifier.size(50.dp)
-                    ) {
+                    if (showMessage) {
+                        Surface(
+                            color = Color.Transparent, modifier = Modifier.size(50.dp)
+                        ) {
 
-
-                        Icon(
-                            imageVector = Icons.Default.Favorite,
-                            contentDescription = null,
-                            tint = if (isMovieInFavoriteList) Color.Red else Color.White,
-                        )
+                            Icon(
+                                imageVector = Icons.Default.Favorite,
+                                contentDescription = null,
+                                tint = if (isMovieInFavoriteList) Color.Red else Color.White,
+                            )
+                        }
                     }
                 }
 
@@ -159,6 +166,13 @@ fun DetailScreen(
                                 val database = (context.applicationContext as Movie).database
                                 val movieFavDao = database.movieFavDao()
                                 val accountDao = database.accountDao()
+                                showMessage = true
+                                if (showMessage) {
+                                    scope.launch {
+                                        delay(3000) // Delay for 3 seconds
+                                        showMessage = false
+                                    }
+                                }
 
                                 CoroutineScope(Dispatchers.IO).launch {
                                     val account = accountDao.getAccountByIsLogin(true)
@@ -225,6 +239,13 @@ fun DetailScreen(
                                 val database = (context.applicationContext as Movie).database
                                 val movieFavDao = database.movieFavDao()
                                 val accountDao = database.accountDao()
+                                showMessage = true
+                                if (showMessage) {
+                                    scope.launch {
+                                        delay(1000) // Delay for 3 seconds
+                                        showMessage = false
+                                    }
+                                }
 
                                 CoroutineScope(Dispatchers.IO).launch {
                                     val account = accountDao.getAccountByIsLogin(true)
