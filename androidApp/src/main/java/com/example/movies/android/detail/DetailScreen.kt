@@ -242,7 +242,7 @@ fun DetailScreen(
                                 showMessage = true
                                 if (showMessage) {
                                     scope.launch {
-                                        delay(1000) // Delay for 3 seconds
+                                        delay(3000) // Delay for 3 seconds
                                         showMessage = false
                                     }
                                 }

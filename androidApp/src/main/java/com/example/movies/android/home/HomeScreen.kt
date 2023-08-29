@@ -22,6 +22,10 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -40,8 +44,7 @@ fun HomeScreen(
 ) {
     val accountLogin = accountLogin
 
-    val pullRefreshState = rememberPullRefreshState(
-        refreshing = uiState.refreshing,
+    val pullRefreshState = rememberPullRefreshState(refreshing = uiState.refreshing,
         onRefresh = { loadNextMovies(true) })
     Box(
         modifier = modifier
@@ -68,35 +71,54 @@ fun HomeScreen(
                 )
             }
 
+            var isInternetConnected by remember { mutableStateOf(false) }
+            //  delay 5 seconds to show error message
+            LaunchedEffect(key1 = true) {
+                kotlinx.coroutines.delay(5000)
+                isInternetConnected = true
+            }
+
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                if (uiState.movies.isEmpty() && uiState.loadFinished) {
+
+                if (uiState.movies.isEmpty() && uiState.loadFinished && isInternetConnected) {
                     item(span = { GridItemSpan(2) }) {
                         Row(
-                            modifier = modifier
+                            modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp),
                             horizontalArrangement = Arrangement.Center,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "No internet connection",
+                                text = "No Internet Connection",
                                 style = MaterialTheme.typography.h5,
-                                textAlign = TextAlign.Center,
-                                modifier = modifier
+                                textAlign = TextAlign.Start,
+                                modifier = Modifier
                                     .fillMaxWidth()
                                     .weight(1f)
                             )
                         }
                     }
+                } else if (uiState.movies.isEmpty() && uiState.loadFinished && !isInternetConnected) {
+                    item(span = { GridItemSpan(2) }) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
                 }
 
-                itemsIndexed(
-                    uiState.movies,
+                itemsIndexed(uiState.movies,
                     key = { _, movie -> movie.id + Math.random() }) { index, movie ->
 
                     MovieListItem(movie = movie, onMovieClick = { navigateToDetail(movie) })

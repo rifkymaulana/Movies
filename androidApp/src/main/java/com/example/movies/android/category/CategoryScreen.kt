@@ -74,8 +74,15 @@ fun CategoryScreen(navigateToDetail: (com.example.movies.domain.model.Movie) -> 
             .fillMaxSize()
             .background(color = MaterialTheme.colors.background)
     ) {
-        // check internet connection and show error message if no connection
-        if (movieNowPlaying.isEmpty() && moviePopular.isEmpty() && movieTopRated.isEmpty() && movieUpcoming.isEmpty()) {
+        // check internet connection and show error message if no connection and delay 5 seconds
+        var isInternetConnected by remember { mutableStateOf(false) }
+        //  delay 5 seconds to show error message
+        LaunchedEffect(key1 = true) {
+            kotlinx.coroutines.delay(5000)
+            isInternetConnected = true
+        }
+
+        if (movieNowPlaying.isEmpty() && moviePopular.isEmpty() && movieTopRated.isEmpty() && movieUpcoming.isEmpty() && isInternetConnected) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
