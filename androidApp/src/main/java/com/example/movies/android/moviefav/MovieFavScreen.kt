@@ -90,6 +90,17 @@ fun MovieFavScreen(
             }
 
             if (movieList != null) {
+                if (movieList!!.size == 0) {
+                    Text(
+                        text = "You don't have any favorite movies",
+                        style = MaterialTheme.typography.body1,
+                        textAlign = TextAlign.Center,
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    )
+                }
+
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
                     contentPadding = PaddingValues(16.dp),
