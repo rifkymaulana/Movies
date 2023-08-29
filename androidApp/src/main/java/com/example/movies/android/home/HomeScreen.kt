@@ -74,6 +74,27 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                if (uiState.movies.isEmpty() && uiState.loadFinished) {
+                    item(span = { GridItemSpan(2) }) {
+                        Row(
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "No internet connection",
+                                style = MaterialTheme.typography.h5,
+                                textAlign = TextAlign.Center,
+                                modifier = modifier
+                                    .fillMaxWidth()
+                                    .weight(1f)
+                            )
+                        }
+                    }
+                }
+
                 itemsIndexed(
                     uiState.movies,
                     key = { _, movie -> movie.id + Math.random() }) { index, movie ->

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -31,7 +32,6 @@ import com.example.movies.android.data.Movies
 import com.example.movies.android.data.movieApiService
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CategoryScreen(navigateToDetail: (com.example.movies.domain.model.Movie) -> Unit) {
     var movieNowPlaying by remember { mutableStateOf(emptyList<Movie>()) }
@@ -74,155 +74,236 @@ fun CategoryScreen(navigateToDetail: (com.example.movies.domain.model.Movie) -> 
             .fillMaxSize()
             .background(color = MaterialTheme.colors.background)
     ) {
-        LazyColumn {
-            item {
-                Row(
+        // check internet connection and show error message if no connection
+        if (movieNowPlaying.isEmpty() && moviePopular.isEmpty() && movieTopRated.isEmpty() && movieUpcoming.isEmpty()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "No Internet Connection",
+                    style = MaterialTheme.typography.h5,
+                    textAlign = TextAlign.Start,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Now Playing",
-                        style = MaterialTheme.typography.h5,
-                        textAlign = TextAlign.Start,
+                        .weight(1f)
+                )
+            }
+        } else {
+
+
+            LazyColumn {
+                item {
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(1f)
-                    )
-                }
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Now Playing",
+                            style = MaterialTheme.typography.h5,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                        )
+                    }
 
-                LazyRow(
-                    contentPadding = PaddingValues(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    itemsIndexed(movieNowPlaying, key = { _, movie -> movie.id }) { _, movie ->
-                        MovieListItem(movie = movie, onMovieClick = {
-                            // convert movie data class to movie domain model
-                            val movieDomainModel = com.example.movies.domain.model.Movie(
-                                id = movie.id,
-                                title = movie.title,
-                                imageUrl = "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
-                                description = movie.overview,
-                                releaseDate = movie.release_date
-                            )
-                            navigateToDetail(movieDomainModel)
-                        })
+                    LazyRow(
+                        contentPadding = PaddingValues(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        // if connection is slow, show loading indicator
+                        if (movieNowPlaying.isEmpty()) {
+                            item {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    CircularProgressIndicator()
+                                }
+                            }
+                        }
+                        itemsIndexed(movieNowPlaying, key = { _, movie -> movie.id }) { _, movie ->
+                            MovieListItem(movie = movie, onMovieClick = {
+                                // convert movie data class to movie domain model
+                                val movieDomainModel = com.example.movies.domain.model.Movie(
+                                    id = movie.id,
+                                    title = movie.title,
+                                    imageUrl = "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
+                                    description = movie.overview,
+                                    releaseDate = movie.release_date
+                                )
+                                navigateToDetail(movieDomainModel)
+                            })
+                        }
                     }
                 }
-            }
 
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Popular",
-                        style = MaterialTheme.typography.h5,
-                        textAlign = TextAlign.Start,
+                item {
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(1f)
-                    )
-                }
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Popular",
+                            style = MaterialTheme.typography.h5,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                        )
+                    }
 
-                LazyRow(
-                    contentPadding = PaddingValues(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    itemsIndexed(moviePopular, key = { _, movie -> movie.id }) { _, movie ->
-                        MovieListItem(movie = movie, onMovieClick = {
-                            // convert movie data class to movie domain model
-                            val movieDomainModel = com.example.movies.domain.model.Movie(
-                                id = movie.id,
-                                title = movie.title,
-                                imageUrl = "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
-                                description = movie.overview,
-                                releaseDate = movie.release_date
-                            )
-                            navigateToDetail(movieDomainModel)
-                        })
+                    LazyRow(
+                        contentPadding = PaddingValues(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        // if connection is slow, show loading indicator
+                        if (moviePopular.isEmpty()) {
+                            item {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    CircularProgressIndicator()
+                                }
+                            }
+                        }
+
+                        itemsIndexed(moviePopular, key = { _, movie -> movie.id }) { _, movie ->
+                            MovieListItem(movie = movie, onMovieClick = {
+                                // convert movie data class to movie domain model
+                                val movieDomainModel = com.example.movies.domain.model.Movie(
+                                    id = movie.id,
+                                    title = movie.title,
+                                    imageUrl = "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
+                                    description = movie.overview,
+                                    releaseDate = movie.release_date
+                                )
+                                navigateToDetail(movieDomainModel)
+                            })
+                        }
                     }
                 }
-            }
 
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Top Rated",
-                        style = MaterialTheme.typography.h5,
-                        textAlign = TextAlign.Start,
+                item {
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(1f)
-                    )
-                }
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Top Rated",
+                            style = MaterialTheme.typography.h5,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                        )
+                    }
 
-                LazyRow(
-                    contentPadding = PaddingValues(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    itemsIndexed(movieTopRated, key = { _, movie -> movie.id }) { _, movie ->
-                        MovieListItem(movie = movie, onMovieClick = {
-                            // convert movie data class to movie domain model
-                            val movieDomainModel = com.example.movies.domain.model.Movie(
-                                id = movie.id,
-                                title = movie.title,
-                                imageUrl = "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
-                                description = movie.overview,
-                                releaseDate = movie.release_date
-                            )
-                            navigateToDetail(movieDomainModel)
-                        })
+                    LazyRow(
+                        contentPadding = PaddingValues(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        // if connection is slow, show loading indicator
+                        if (movieTopRated.isEmpty()) {
+                            item {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    CircularProgressIndicator()
+                                }
+                            }
+                        }
+
+                        itemsIndexed(movieTopRated, key = { _, movie -> movie.id }) { _, movie ->
+                            MovieListItem(movie = movie, onMovieClick = {
+                                // convert movie data class to movie domain model
+                                val movieDomainModel = com.example.movies.domain.model.Movie(
+                                    id = movie.id,
+                                    title = movie.title,
+                                    imageUrl = "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
+                                    description = movie.overview,
+                                    releaseDate = movie.release_date
+                                )
+                                navigateToDetail(movieDomainModel)
+                            })
+                        }
                     }
                 }
-            }
 
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Upcoming",
-                        style = MaterialTheme.typography.h5,
-                        textAlign = TextAlign.Start,
+                item {
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(1f)
-                    )
-                }
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Upcoming",
+                            style = MaterialTheme.typography.h5,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                        )
+                    }
 
-                LazyRow(
-                    contentPadding = PaddingValues(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    itemsIndexed(movieUpcoming, key = { _, movie -> movie.id }) { _, movie ->
-                        MovieListItem(movie = movie, onMovieClick = {
-                            // convert movie data class to movie domain model
-                            val movieDomainModel = com.example.movies.domain.model.Movie(
-                                id = movie.id,
-                                title = movie.title,
-                                imageUrl = "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
-                                description = movie.overview,
-                                releaseDate = movie.release_date
-                            )
-                            navigateToDetail(movieDomainModel)
-                        })
+                    LazyRow(
+                        contentPadding = PaddingValues(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        // if connection is slow, show loading indicator
+                        if (movieUpcoming.isEmpty()) {
+                            item {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    CircularProgressIndicator()
+                                }
+                            }
+                        }
+
+                        itemsIndexed(movieUpcoming, key = { _, movie -> movie.id }) { _, movie ->
+                            MovieListItem(movie = movie, onMovieClick = {
+                                // convert movie data class to movie domain model
+                                val movieDomainModel = com.example.movies.domain.model.Movie(
+                                    id = movie.id,
+                                    title = movie.title,
+                                    imageUrl = "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
+                                    description = movie.overview,
+                                    releaseDate = movie.release_date
+                                )
+                                navigateToDetail(movieDomainModel)
+                            })
+                        }
                     }
                 }
             }

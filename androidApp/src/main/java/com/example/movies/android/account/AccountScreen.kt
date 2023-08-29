@@ -44,8 +44,7 @@ fun AccountScreen(navController: NavController) {
         Text(
             text = "Account Information",
             style = MaterialTheme.typography.h5,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colors.primary
+            textAlign = TextAlign.Center
         )
 
         Spacer(modifier = Modifier.padding(8.dp))
