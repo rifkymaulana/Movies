@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.movies.android.Movie
+import com.example.movies.android.data.SharedPreference
 import com.example.movies.android.login.accountLogin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -65,6 +66,12 @@ fun AccountScreen(navController: NavController) {
                     account?.let { nonNullAccount ->
                         withContext(Dispatchers.Main) {
                             accountDao.updateAccount(nonNullAccount.id, false)
+
+                            // delete shared preference
+                            SharedPreference(context).remove("id")
+                            SharedPreference(context).remove("email")
+                            SharedPreference(context).remove("name")
+
                             navController.navigate("preLogin") {
                                 popUpTo("preLogin") {
                                     inclusive = true

@@ -44,6 +44,7 @@ import androidx.navigation.NavController
 import com.example.movies.android.Movie
 import com.example.movies.android.R
 import com.example.movies.android.common.Button
+import com.example.movies.android.data.SharedPreference
 import com.example.movies.android.database.AccountEntity
 import com.example.movies.android.ui.Primary
 import kotlinx.coroutines.CoroutineScope
@@ -66,13 +67,30 @@ fun PreLoginScreen(navController: NavController) {
         val account = withContext(Dispatchers.IO) {
             accountDao.getAccountByIsLogin(true)
         }
+        accountLogin = account
 
-        if (account != null) {
-            accountLogin = account
-            navController.navigate("home")
+        // check if user is logged in use shared preference
+        val id = SharedPreference(context).get("id")
+        val email = SharedPreference(context).get("email")
+        val name = SharedPreference(context).get("name")
+
+        if (id != null && email != null && name != null) {
+            // if user is logged in, move to home
+            navController.navigate("home") {
+                popUpTo("home") {
+                    inclusive = true
+                }
+            }
         } else {
-            navController.navigate("login")
+            // if user is not logged in, move to login
+            navController.navigate("login") {
+                popUpTo("login") {
+                    inclusive = true
+                }
+            }
         }
+
+
     }
 }
 
@@ -197,6 +215,12 @@ fun LoginScreen(
                         if (account != null) {
                             accountLogin = account
                             accountDao.updateAccount(account.id, true)
+
+                            // shared preference
+                            SharedPreference(context).save("id", account.id.toString())
+                            SharedPreference(context).save("email", account.email)
+                            SharedPreference(context).save("name", account.name)
+
                             navController.navigate("preLogin") {
                                 popUpTo("preLogin") {
                                     inclusive = true
